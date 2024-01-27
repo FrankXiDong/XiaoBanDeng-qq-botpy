@@ -1,0 +1,15 @@
+
+{'guild_id': '10030228423310922565', 
+'roles': [
+{'id': '4', 'name': '频道主', 'color': 4294917938, 'hoist': 1, 'number': 1, 'member_limit': 1}, 
+{'id': '2', 'name': '超级管理员', 'color': 4294936110, 'hoist': 1, 'number': 4, 'member_limit': 50}, 
+{'id': '7', 'name': '分组管理员', 'color': 4283608319, 'hoist': 1, 'number': 2, 'member_limit': 50}, 
+{'id': '5', 'name': '子频道/版块管理员', 'color': 4288922822, 'hoist': 1, 'number': 1, 'member_limit': 50},
+ {'id': '16611081', 'name': '管理员', 'color': 4289887999, 'hoist': 1, 'number': 1, 'member_limit': 3000},
+{'id': '16583273', 'name': '身份组', 'color': 4285110493, 'hoist': 1, 'number': 1, 'member_limit': 3000}, 
+{'id': '16609778', 'name': 'test', 'color': 4285110493, 'hoist': 1, 'number': 2, 'member_limit': 3000}, 
+{'id': '16612498', 'name': '大恏人', 'color': 4294920704, 'hoist': 1, 'number': 0, 'member_limit': 3000}, 
+{'id': '16612501', 'name': '正式成员', 'color': 4281939159, 'hoist': 1, 'number': 0, 'member_limit': 3000}, 
+{'id': '6', 'name': '访客', 'color': 4286151052, 'hoist': 0, 'number': 0, 'member_limit': 3000}, 
+{'id': '1', 'name': '普通成员', 'color': 4286151052, 'hoist': 0, 'number': 0, 'member_limit': 1000}
+], 'role_num_limit': '32'}
