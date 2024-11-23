@@ -36,7 +36,8 @@ def tryagain(text): #给消息加密，躲避屏蔽词
     result = ''.join([char + '丿' if i < len(text) - 1 else char for i, char in enumerate(text)])  
     return result
 def chat_body(content):
-    api_key = "sk-5cd23846d4304f63b93db419bf87641e"  
+    #api_key = "sk-5cd23846d4304f63b93db419bf87641e"  
+    api_key = "sk-d6af0c89a1f44195beec9213074f52b7" #临时
     model_name = "deepseek-chat"  
     user_message = content 
     with open('./temp/model.txt','r', encoding='utf-8') as f:

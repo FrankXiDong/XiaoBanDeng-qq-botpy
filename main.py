@@ -8,14 +8,9 @@ from botpy.forum import Thread
 from botpy.types.forum import Post, Reply, AuditResult
 from botpy.types.channel import ChannelSubType, ChannelType
 from time import sleep
-from openai import OpenAI
-from urllib.parse import urlencode
-from urllib.request import urlopen
-from codeshop.areacode import mareacode,mareaname
 from codeshop.locknum import locknum
 from codeshop.game import joingame,startgame
 from codeshop.balance import balance
-from codeshop.DeepSeek import chatlearning,chatsimple
 from codeshop.output import arcode,arname,tryagain,chat_body
 
 _log = logging.get_logger()
