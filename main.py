@@ -25,7 +25,7 @@ class MyClient(botpy.Client):
         start_txt="\
 -----------启动成功------------\n\
     小板凳频道管家，启动！\n\
-    版本:v6.0.0-600"
+    版本:v6.1.1"
         print(start_txt)
     date = datetime.datetime.now().strftime("%Y-%m-%d %H:%m")
     if date == '2024-8-28 17:50':
