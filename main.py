@@ -72,7 +72,7 @@ class MyClient(botpy.Client):
             with open('./temp/temp_message.txt', 'w', encoding='utf-8') as file:  
                 file.write("[]")
             result="已经清空了缓存的所有上下文数据！"  
-        elif "功能" in message.content or (message.content==" " or "" or "  "):
+        elif "功能" in message.content:
             with open('./temp/aboutme.txt', 'r', encoding='utf-8') as file:  
                 result=file.read()
         else:
