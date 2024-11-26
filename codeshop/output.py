@@ -62,7 +62,7 @@ def chat_body(content):
     if "共产党"in answer:
         answer=answer.replace("共产党","CPC") 
     answer=answer.replace("**"," ").replace("#"," ")        
-    text="\n"+answer+"\n\n声明：以上内容为AI自动生成，仅供参考！\n注：小板凳智能助手已经升级6.1版本了，欢迎大家体验！"
+    text="\n"+answer+"\n\nPS：以上内容为AI自动生成，仅供参考！小板凳智能助手已经升级V6版了，欢迎体验。"
     temp_message=eval(temp_message)
     temp_message.append({"role":"user","content":user_message})
     temp_message.append({"role":"assistant","content":answer})
