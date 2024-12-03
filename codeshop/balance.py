@@ -2,13 +2,13 @@ from openai import OpenAI
 from urllib.parse import urlencode
 from urllib.request import urlopen
 import requests,json
-def balance():
+def balance(key):
     url = "https://api.deepseek.com/user/balance"
     payload={}
     headers = {
         'Accept': 'application/json',
         #'Authorization': 'Bearer sk-5cd23846d4304f63b93db419bf87641e'
-        'Authorization': 'Bearer sk-d6af0c89a1f44195beec9213074f52b7' #临时
+        'Authorization': 'Bearer '+key #临时
     }
     response = requests.request("GET", url, headers=headers, data=payload)
     print(response.text)

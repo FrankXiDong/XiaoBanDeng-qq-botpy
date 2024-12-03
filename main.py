@@ -59,7 +59,8 @@ class MyClient(botpy.Client):
         elif "开始真心话" in message.content:#开始游戏
             result=startgame(message.author)
         elif "查询余额" in message.content:
-            data=balance()
+            key = json_data["ai"]["chat 02"]["key"]
+            data=balance(key = key)
             result="剩余的余额为："+data+"元人民币。"
         elif "读取" in message.content:
             with open('./temp/tryagain.txt','r', encoding='utf-8') as f:
@@ -75,14 +76,17 @@ class MyClient(botpy.Client):
         elif "功能" in message.content:
             with open('./temp/aboutme.txt', 'r', encoding='utf-8') as file:  
                 result=file.read()
+        elif "/游戏" in message.content:
+            result="正在开发中，敬请期待！"
         else:
             data = False
             for k,r in keyanswer.items():
                 if k in message.content:#如果在固定问答内容中，使用固定问答文本
-                    result=r
-                    data=True
+                    result = r
+                    data = True
             if data == False:
-                result=chat_body(message.content)
+                key = json_data["ai"]["chat 02"]["key"]
+                result = chat_body(message.content, key = key) #调用chat_body函数处理消息
         if result!=False:
             try:
                 await message._api.post_group_message(
@@ -125,5 +129,9 @@ if __name__ == "__main__":
     intents.forums=True
     intents.public_messages=True
     #intents = botpy.Intents(public_guild_messages=True, direct_message=True, guilds=True)
+    with open('./config.json','r',encoding='utf8')as fp:
+        json_data = json.load(fp)
+        appid = json_data["bot"]["appid"]
+        secret = json_data["bot"]["secret"]
     client = MyClient(intents=intents,timeout=8)
-    client.run(appid="102040950",secret="Pr9E9sPimeIoCg4K")
+    client.run(appid=appid,secret=secret)

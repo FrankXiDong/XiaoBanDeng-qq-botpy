@@ -35,11 +35,12 @@ def check(value, my_dict):
 def tryagain(text): #给消息加密，躲避屏蔽词
     result = ''.join([char + '丿' if i < len(text) - 1 else char for i, char in enumerate(text)])  
     return result
-def chat_body(content):
-    #api_key = "sk-5cd23846d4304f63b93db419bf87641e"  
-    api_key = "sk-d6af0c89a1f44195beec9213074f52b7" #临时
-    model_name = "deepseek-chat"  
-    user_message = content 
+def chat_body(content, key):
+    #api_key = "sk-5cd23846d4304f63b93db419bf87641e" 
+    #api_key = "sk-846438feee1e41a08d644e86d1bc02c7"
+    api_key = key #临时
+    model_name = "小板凳AI助手"  
+    user_message = content
     with open('./temp/model.txt','r', encoding='utf-8') as f:
         model=f.read()
     with open('./temp/temp_message.txt', 'r', encoding='utf-8') as f:  
@@ -53,8 +54,17 @@ def chat_body(content):
     if "程序出错" in response:
         ins=False
         return 0
+    answer = after(response)
+    text="\n"+answer+"\n\nPS：以上内容为AI自动生成，仅供参考。"
+    temp_message=eval(temp_message)
+    temp_message.append({"role":"user","content":user_message})
+    temp_message.append({"role":"assistant","content":answer})
+    with open('./temp/temp_message.txt', 'w', encoding='utf-8') as file:  
+        file.write(str(temp_message))
+    return text
+def after(text):
     #对回答进行修改，以免被拦截
-    answer=response.strip('**')
+    answer=text.strip('**')
     if ".com"in answer:
         answer=answer.replace(".","点")
     if ".cn"in answer:
@@ -62,11 +72,4 @@ def chat_body(content):
     if "共产党"in answer:
         answer=answer.replace("共产党","CPC") 
     answer=answer.replace("**"," ").replace("#"," ")        
-    text="\n"+answer+"\n\nPS：以上内容为AI自动生成，仅供参考！小板凳智能助手已经升级V6版了，欢迎体验。"
-    temp_message=eval(temp_message)
-    temp_message.append({"role":"user","content":user_message})
-    temp_message.append({"role":"assistant","content":answer})
-    temp_message=str(temp_message)
-    with open('./temp/temp_message.txt', 'w', encoding='utf-8') as file:  
-        file.write(str(temp_message))
-    return text
+    return answer
