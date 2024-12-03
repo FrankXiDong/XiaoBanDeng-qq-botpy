@@ -18,6 +18,7 @@ keyanswer = {
     "test": "你在测试什么？",
     "你是哪个省的": "妈妈生的（误）",
 }
+json_data = {}
 
 
 class MyClient(botpy.Client):
@@ -56,6 +57,7 @@ class MyClient(botpy.Client):
             )
 
     async def on_group_at_message_create(self, message: GroupMessage):  # 收到群消息时
+        global json_data
         dataid = eval(str(message.author))
         open_id = dataid["member_openid"]  # 获取open_id
         result = False
@@ -81,12 +83,12 @@ class MyClient(botpy.Client):
         elif "清空上下文" in message.content:
             with open("./temp/temp_message.txt", "w", encoding="utf-8") as file:
                 file.write("[]")
+            with open("./temp/temp_message_game.json", "w", encoding="utf-8") as file:
+                json.dump({}, file)
             result = "已经清空了缓存的所有上下文数据！"
         elif "功能" in message.content:
             with open("./temp/aboutme.txt", "r", encoding="utf-8") as file:
                 result = file.read()
-        elif "/游戏" in message.content:
-            result = "正在开发中，敬请期待！"
         else:
             data = False
             for k, r in keyanswer.items():

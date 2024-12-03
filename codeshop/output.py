@@ -1,13 +1,7 @@
-import os, json, time, random, requests, ast, urllib
 from time import sleep
-from openai import OpenAI
-from urllib.parse import urlencode
-from urllib.request import urlopen
+import json
 from codeshop.areacode import mareacode, mareaname
-from codeshop.locknum import locknum
-from codeshop.game import joingame, startgame
-from codeshop.balance import balance
-from codeshop.DeepSeek import chatlearning, chatsimple
+from codeshop.DeepSeek import chatlearning, chatsimple, chatgame
 
 
 def arcode(areanum):
@@ -51,28 +45,46 @@ def chat_body(content, key):
     # api_key = "sk-5cd23846d4304f63b93db419bf87641e"
     # api_key = "sk-846438feee1e41a08d644e86d1bc02c7"
     api_key = key  # 临时
-    model_name = "小板凳AI助手"
+    model_name = "deepseek-chat"
     user_message = content
     with open("./temp/model.txt", "r", encoding="utf-8") as f:
-        model = f.read()
+        model_chat = f.read()
     with open("./temp/temp_message.txt", "r", encoding="utf-8") as f:
-        temp_message = f.read()
+        temp_message_chat = f.read()
+    with open("./temp/model_game.txt", "r", encoding="utf-8") as f:
+        model_game = f.read()
+    with open("./temp/temp_message_game.json", "r", encoding="utf-8") as f:
+        temp_message_game = json.load(f)
     # 分情况请求不同的API
     if "维权" in content:
-        response = chatlearning(api_key, model_name, user_message, model, temp_message)
+        response = chatlearning(api_key, model_name, user_message, model_chat, temp_message_chat)
+        game = False
+    elif "/游戏" in content:
+        user_message = user_message.split("/游戏")[1]
+        response = "【游戏模式】\n" + chatgame(
+            api_key, model_name, user_message, model_game, temp_message_game
+        )
+        game = True
     else:
-        response = chatsimple(api_key, model_name, user_message, model, temp_message)
+        response = chatsimple(api_key, model_name, user_message, model_chat, temp_message_chat)
+        game = False
     print(response)
-    if "程序出错" in response:
+    if "机器人程序codeshop.DeepSeek出错" in response:
         ins = False
         return 0
     answer = after(response)
+    if game == False:
+        temp_message = eval(temp_message_chat)
+        temp_message.append({"role": "user", "content": user_message})
+        temp_message.append({"role": "assistant", "content": answer})
+        with open("./temp/temp_message.txt", "w", encoding="utf-8") as file:
+            file.write(str(temp_message))
+    else:
+        temp_message_game.append({"role": "user", "content": user_message})
+        temp_message_game.append({"role": "assistant", "content": answer})
+        with open("./temp/temp_message_game.json", "w", encoding="utf-8") as file:
+            json.dump(temp_message_game, file, ensure_ascii=False, indent=4)
     text = "\n" + answer + "\n\nPS：以上内容为AI自动生成，仅供参考。"
-    temp_message = eval(temp_message)
-    temp_message.append({"role": "user", "content": user_message})
-    temp_message.append({"role": "assistant", "content": answer})
-    with open("./temp/temp_message.txt", "w", encoding="utf-8") as file:
-        file.write(str(temp_message))
     return text
 
 
