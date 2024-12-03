@@ -40,8 +40,7 @@ class MyClient(botpy.Client):
         )
 
     async def on_c2c_message_create(self, message: Message):  # 收到私聊信息时
-        dataid = eval(str(message.author))
-        open_id = dataid["user_openid"]  # 获取open_id
+        openid = message.author.user_openid
         if "新增提示词" in message.content:  # 新增AI大模型的提示词
             word = message.content.split("新增提示词")[1]
             with open("./temp/model.txt", "a", encoding="utf-8") as file:
@@ -55,6 +54,34 @@ class MyClient(botpy.Client):
             logger.info(
                 "新增了一个提示词。\n发送指令的ID：{open_id}\n提示词内容：{word}"
             )
+            '''
+        elif "删除提示词" in message.content:  # 删除AI大模型的提示词
+            word = message.content.split("删除提示词")[1]
+            with open("./temp/model.txt", "r", encoding="utf-8") as file:
+                lines = file.readlines()
+            with open("./temp/model.txt", "w", encoding="utf-8") as file:
+                for line in lines:
+                    if line.strip("\n")!= word:
+                        file.write(line)
+            await message._api.post_c2c_message(
+                openid=message.author.user_openid,
+                msg_type=0,
+                msg_id=message.id,
+                content=f"我删除了你的提示词：{word}。",
+            )
+            logger.info(
+                "删除了一个提示词。\n发送指令的ID："+openid+"\n提示词内容："+word
+            )
+            '''
+        elif "审核" in message.content:
+            await message._api.post_c2c_message(
+                openid=message.author.user_openid,
+                msg_type=0,
+                msg_id=message.id,
+                content=f"功能尚未开发！",
+            )
+        else:
+            return
 
     async def on_group_at_message_create(self, message: GroupMessage):  # 收到群消息时
         global json_data
@@ -142,7 +169,7 @@ if __name__ == "__main__":
     intents.forums = True
     intents.public_messages = True
     # intents = botpy.Intents(public_guild_messages=True, direct_message=True, guilds=True)
-    with open("./config.json", "r", encoding="utf8") as fp:
+    with open("../config.json", "r", encoding="utf-8") as fp:
         json_data = json.load(fp)
         appid = json_data["bot"]["appid"]
         secret = json_data["bot"]["secret"]
