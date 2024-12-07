@@ -20,15 +20,19 @@ keyanswer = {
     "你是哪个省的": "妈妈生的（误）",
 }
 json_data = {}
+version = ""
 
 
 class MyClient(botpy.Client):
 
     async def on_ready(self):  # 初次启动时
+        global version
+        with open("./temp/version.txt", "r", encoding="utf-8") as file:
+            version=file.read()
         start_txt = "\
 -----------启动成功------------\n\
     小板凳频道管家，启动！\n\
-    版本:v6.1.1"
+    版本:"+version
         print(start_txt)
 
     date = datetime.datetime.now().strftime("%Y-%m-%d %H:%m")
