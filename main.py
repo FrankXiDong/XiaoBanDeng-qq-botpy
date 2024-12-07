@@ -13,6 +13,7 @@ from codeshop.game import joingame, startgame
 from codeshop.balance import balance
 from codeshop.output import arcode, arname, tryagain, chat_body
 from botpy.audio import Audio
+import asyncio
 
 _log = logging.get_logger()
 keyanswer = {
@@ -34,15 +35,36 @@ class MyClient(botpy.Client):
     小板凳频道管家，启动！\n\
     版本:"+version
         print(start_txt)
+        await self.api.post_group_message(
+                group_openid="7C54D45EDDE030719971497006C0CA03",
+                msg_type=0,
+                content="机器人已启动",
+            )
+        #asyncio.create_task(self.send_periodic_message())
 
-    date = datetime.datetime.now().strftime("%Y-%m-%d %H:%m")
-    if date == "2024-8-28 17:50":
-        message._api.post_group_message(
-            group_openid="BC5B5B45E1A6AF8BAEE0166EE82584E9",
-            msg_type=0,
-            msg_id=message.id,
-            content=f"test",
-        )
+    async def send_periodic_message(self):
+        target_time = datetime.time(hour=19, minute=55)
+        
+        while True:
+            now = datetime.datetime.now()
+            target_datetime = datetime.datetime.combine(now.date(), target_time)
+            
+            if now > target_datetime:
+                # 如果当前时间已经过了目标时间，则设置为第二天的目标时间
+                target_datetime += datetime.timedelta(days=1)
+            
+            # 计算等待时间
+            wait_seconds = (target_datetime - now).total_seconds()
+            await asyncio.sleep(wait_seconds)
+            
+            # 发送消息
+            await self.api.post_group_message(
+                group_openid="7C54D45EDDE030719971497006C0CA03",
+                msg_type=0,
+                content="这是一条定时发送的消息",
+            )
+
+    
 
     async def on_c2c_message_create(self, message: Message):  # 收到私聊信息时
         openid = message.author.user_openid
@@ -92,6 +114,7 @@ class MyClient(botpy.Client):
         await self.api.on_microphone(audio.channel_id)
 
     async def on_group_at_message_create(self, message: GroupMessage):  # 收到群消息时
+        print(message)
         global json_data
         dataid = eval(str(message.author))
         open_id = dataid["member_openid"]  # 获取open_id
@@ -154,6 +177,12 @@ class MyClient(botpy.Client):
                     msg_type=0,
                     msg_id=message.id,
                     content=f"请尝试发送“读取”获取加密版回答",
+                )
+                await self.api.post_group_message(
+                    group_openid=message.group_openid,
+                    msg_type=0,
+                    msg_id=message.id,
+                    content=a,
                 )
         else:
             await message._api.post_group_message(

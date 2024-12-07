@@ -99,7 +99,16 @@ def after(text):
         answer = answer.replace(".", "点")
     if ".cn" in answer:
         answer = answer.replace(".", "点")
-    if "共产党" in answer:
-        answer = answer.replace("共产党", "CPC")
+    answer = answer.replace("共产党", "CPC")
+    answer = answer.replace("习近平总书记","Mr.Xi")
+    answer = answer.replace("习近平主席","Mr.Xi")
+    answer = answer.replace("习近平", "Mr.Xi")
+    answer = answer.replace("毛泽东","Mr.Mao")
+    answer = answer.replace("总书记","ZongShuJi")
+    answer = answer.replace("中华人民共和国主席","President of China")
+    answer = answer.replace("中央军委主席","Chairman of the Central Military Commission")
+    answer = answer.replace("中央军事委员会主席","Chairman of the Central Military Commission")
+    answer = answer.replace("中央委员会","Central Committee")
+    answer = answer.replace("市委书记","CPC市丿委员会，书丿记")
     answer = answer.replace("**", " ").replace("#", " ")
     return answer
