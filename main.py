@@ -12,6 +12,7 @@ from codeshop.locknum import locknum
 from codeshop.game import joingame, startgame
 from codeshop.balance import balance
 from codeshop.output import arcode, arname, tryagain, chat_body
+from botpy.audio import Audio
 
 _log = logging.get_logger()
 keyanswer = {
@@ -83,6 +84,9 @@ class MyClient(botpy.Client):
         else:
             return
 
+    async def on_audio_start(self, audio: Audio):
+        await self.api.on_microphone(audio.channel_id)
+
     async def on_group_at_message_create(self, message: GroupMessage):  # 收到群消息时
         global json_data
         dataid = eval(str(message.author))
@@ -111,7 +115,7 @@ class MyClient(botpy.Client):
             with open("./temp/temp_message.txt", "w", encoding="utf-8") as file:
                 file.write("[]")
             with open("./temp/temp_message_game.json", "w", encoding="utf-8") as file:
-                json.dump({}, file)
+                json.dump([], file)
             result = "已经清空了缓存的所有上下文数据！"
         elif "功能" in message.content:
             with open("./temp/aboutme.txt", "r", encoding="utf-8") as file:

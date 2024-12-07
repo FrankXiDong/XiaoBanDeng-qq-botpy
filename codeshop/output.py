@@ -56,17 +56,20 @@ def chat_body(content, key):
     with open("./temp/temp_message_game.json", "r", encoding="utf-8") as f:
         temp_message_game = json.load(f)
     # 分情况请求不同的API
-    if "维权" in content:
-        response = chatlearning(api_key, model_name, user_message, model_chat, temp_message_chat)
-        game = False
-    elif "/游戏" in content:
+    if "/游戏" in content:
         user_message = user_message.split("/游戏")[1]
-        response = "【游戏模式】\n" + chatgame(
+        ans = chatgame(
             api_key, model_name, user_message, model_game, temp_message_game
         )
+        response = "【游戏模式】\n" + ans
         game = True
+    elif "维权" in content:
+        ans = chatlearning(api_key, model_name, user_message, model_chat, temp_message_chat)
+        response = ans
+        game = False
     else:
-        response = chatsimple(api_key, model_name, user_message, model_chat, temp_message_chat)
+        ans = chatsimple(api_key, model_name, user_message, model_chat, temp_message_chat)
+        response = ans
         game = False
     print(response)
     if "机器人程序codeshop.DeepSeek出错" in response:
@@ -76,15 +79,16 @@ def chat_body(content, key):
     if game == False:
         temp_message = eval(temp_message_chat)
         temp_message.append({"role": "user", "content": user_message})
-        temp_message.append({"role": "assistant", "content": answer})
+        temp_message.append({"role": "assistant", "content": ans})
         with open("./temp/temp_message.txt", "w", encoding="utf-8") as file:
             file.write(str(temp_message))
+        text = "\n" + answer + "\n\nPS：以上内容为AI自动生成，仅供参考。"
     else:
         temp_message_game.append({"role": "user", "content": user_message})
-        temp_message_game.append({"role": "assistant", "content": answer})
+        temp_message_game.append({"role": "assistant", "content": ans})
         with open("./temp/temp_message_game.json", "w", encoding="utf-8") as file:
             json.dump(temp_message_game, file, ensure_ascii=False, indent=4)
-    text = "\n" + answer + "\n\nPS：以上内容为AI自动生成，仅供参考。"
+        text = "\n" + answer + "\n\nPS：以上内容为AI自动生成，仅供娱乐，无实际意义。"
     return text
 
 
